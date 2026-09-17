@@ -90,6 +90,12 @@
       out.push(row('globe', 'Site internet', d.website, Contact.websiteUrl(d),
                    ' target="_blank" rel="noopener"'));
     }
+    if (d.linkedin) {
+      // Affichée sans protocole : « linkedin.com/in/… » se lit, pas « https://www. ».
+      out.push(row('linkedin', 'LinkedIn',
+                   Contact.linkedinUrl(d).replace(/^https?:\/\/(www\.)?/i, ''),
+                   Contact.linkedinUrl(d), ' target="_blank" rel="noopener"'));
+    }
     var address = Contact.addressQuery(d);
     if (address) {
       out.push(row('pin', 'Adresse',
