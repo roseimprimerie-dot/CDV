@@ -16,7 +16,7 @@ window.Contact = (function () {
     email2: '',
     website: 'www.graffeuille.fr',
     websiteInContacts: false,
-    linkedin: '',
+    linkedin: 'https://fr.linkedin.com/company/ets-graffeuille-sas',
     company: 'GRAFFEUILLE',
     street: '120, route de Saint-Jean d’Angély',
     postalCode: '16170',
@@ -163,6 +163,13 @@ window.Contact = (function () {
   }
 
   /**
+   * Valeurs communes à toute l'entreprise : quand elles n'ont pas bougé, elles
+   * sont omises de la charge compacte, le modèle les rétablissant à la lecture.
+   * Cinquante caractères de moins dans un QR imprimé à 24 mm, cela compte.
+   */
+  var SHARED = ['accent', 'linkedin'];
+
+  /**
    * Charge compacte : les champs sont joints par « ~ », les valeurs identiques
    * au modèle et les champs vides de fin sont omis. Ce format tient dans un QR
    * bien plus petit qu'un JSON, ce qui compte pour un code imprimé à 24 mm.
@@ -170,7 +177,8 @@ window.Contact = (function () {
   function pack(d) {
     var parts = PACKED.map(function (k) {
       var v = d[k] == null ? '' : String(d[k]);
-      if (k === 'accent' && v.toLowerCase() === DEFAULTS.accent) return '';
+      if (SHARED.indexOf(k) >= 0
+          && v.toLowerCase() === String(DEFAULTS[k]).toLowerCase()) return '';
       return v.replace(/~/g, '-');
     });
     while (parts.length && parts[parts.length - 1] === '') parts.pop();

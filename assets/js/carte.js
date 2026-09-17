@@ -91,10 +91,15 @@
                    ' target="_blank" rel="noopener"'));
     }
     if (d.linkedin) {
-      // Affichée sans protocole : « linkedin.com/in/… » se lit, pas « https://www. ».
+      // La page de l'entreprise s'annonce par son nom : l'URL complète tient sur
+      // deux lignes, se coupe au milieu du nom, et n'apprend rien de plus. Un
+      // profil personnel, lui, garde son adresse, faute de mieux à afficher.
+      var li = Contact.linkedinUrl(d);
+      var isCompany = /\/company\//i.test(li);
       out.push(row('linkedin', 'LinkedIn',
-                   Contact.linkedinUrl(d).replace(/^https?:\/\/(www\.)?/i, ''),
-                   Contact.linkedinUrl(d), ' target="_blank" rel="noopener"'));
+                   isCompany && d.company ? d.company
+                     : li.replace(/^https?:\/\/(www\.)?/i, ''),
+                   li, ' target="_blank" rel="noopener"'));
     }
     var address = Contact.addressQuery(d);
     if (address) {

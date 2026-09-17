@@ -88,7 +88,7 @@ Le site est `www.graffeuille.fr` pour l'ensemble de l'équipe.
    `carte.json` téléchargé remplace celui du dossier.
 3. Déposer éventuellement une photo dans le dossier et écrire son nom de
    fichier dans le champ « Photo du dossier ».
-   Renseigner aussi `linkedin` dans `carte.json` s'il y a un profil.
+   Le champ `linkedin` de `carte.json` vaut déjà la page de l'entreprise.
 4. Imprimer la carte : son QR pointe déjà vers la nouvelle adresse.
 
 `index.html` ne contient que trois lignes utiles — il désigne `carte.json` et
@@ -103,24 +103,32 @@ déjà distribuées, alors qu'un QR contenant une vCard fige les coordonnées da
 l'encre.
 
 La page affiche le logo, le portrait s'il y en a un, le nom, la fonction, puis
-cinq lignes tactiles : appeler, écrire, ouvrir le site, ouvrir le profil
+cinq lignes tactiles : appeler, écrire, ouvrir le site, ouvrir la page
 LinkedIn, ouvrir l'itinéraire. Le bouton « Ajouter à mes contacts » télécharge
 la fiche `.vcf`.
 
-### Le profil LinkedIn
+### La page LinkedIn
 
-Le champ `linkedin` de `carte.json` accepte les trois formes qu'on recopie
-d'ordinaire — l'identifiant seul, l'adresse sans protocole, ou l'URL complète :
+Le champ `linkedin` vaut par défaut la page de l'entreprise, la même pour tout
+le monde :
 
 ```json
-"linkedin": "jerome-goumard"
-"linkedin": "linkedin.com/in/jerome-goumard"
-"linkedin": "https://fr.linkedin.com/in/jerome-goumard"
+"linkedin": "https://fr.linkedin.com/company/ets-graffeuille-sas"
 ```
 
-Laissé vide, il ne produit aucune ligne : la carte s'affiche comme avant. Le
-profil part aussi dans la fiche `.vcf`, en `X-SOCIALPROFILE` — ce que lit
-Contacts sur iPhone ; Android l'ignore sans broncher.
+Comme c'est une page d'entreprise, la ligne affiche le nom plutôt que
+l'adresse : l'URL complète tient sur deux lignes, se coupe au milieu du nom, et
+n'apprend rien de plus. Une personne qui aurait son propre profil peut mettre
+le sien à la place — l'identifiant seul, l'adresse sans protocole ou l'URL
+complète sont acceptés — et c'est alors l'adresse qui s'affiche.
+
+Vidé, le champ ne produit aucune ligne. La page part aussi dans la fiche
+`.vcf`, en `X-SOCIALPROFILE` — ce que lit Contacts sur iPhone ; Android
+l'ignore sans broncher.
+
+Étant commune à toute l'entreprise, elle est omise de la charge compacte glissée
+dans l'URL tant qu'elle n'a pas été changée, comme la couleur d'accent : cela
+épargne cinquante caractères au QR des cartes sans identifiant.
 
 La ligne n'existe que sur la carte en ligne. Le verso imprimé ne la reprend
 pas : son QR mène déjà à la page, et les trois lignes de contact qu'il peut
