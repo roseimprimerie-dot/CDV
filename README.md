@@ -88,6 +88,7 @@ Le site est `www.graffeuille.fr` pour l'ensemble de l'équipe.
    `carte.json` téléchargé remplace celui du dossier.
 3. Déposer éventuellement une photo dans le dossier et écrire son nom de
    fichier dans le champ « Photo du dossier ».
+   Renseigner aussi `linkedin` dans `carte.json` s'il y a un profil.
 4. Imprimer la carte : son QR pointe déjà vers la nouvelle adresse.
 
 `index.html` ne contient que trois lignes utiles — il désigne `carte.json` et
@@ -102,9 +103,28 @@ déjà distribuées, alors qu'un QR contenant une vCard fige les coordonnées da
 l'encre.
 
 La page affiche le logo, le portrait s'il y en a un, le nom, la fonction, puis
-quatre lignes tacticle : appeler, écrire, ouvrir le site,
-ouvrir l'itinéraire. Le bouton « Ajouter à mes contacts » télécharge la fiche
-`.vcf`.
+cinq lignes tactiles : appeler, écrire, ouvrir le site, ouvrir le profil
+LinkedIn, ouvrir l'itinéraire. Le bouton « Ajouter à mes contacts » télécharge
+la fiche `.vcf`.
+
+### Le profil LinkedIn
+
+Le champ `linkedin` de `carte.json` accepte les trois formes qu'on recopie
+d'ordinaire — l'identifiant seul, l'adresse sans protocole, ou l'URL complète :
+
+```json
+"linkedin": "jerome-goumard"
+"linkedin": "linkedin.com/in/jerome-goumard"
+"linkedin": "https://fr.linkedin.com/in/jerome-goumard"
+```
+
+Laissé vide, il ne produit aucune ligne : la carte s'affiche comme avant. Le
+profil part aussi dans la fiche `.vcf`, en `X-SOCIALPROFILE` — ce que lit
+Contacts sur iPhone ; Android l'ignore sans broncher.
+
+La ligne n'existe que sur la carte en ligne. Le verso imprimé ne la reprend
+pas : son QR mène déjà à la page, et les trois lignes de contact qu'il peut
+tenir sont comptées.
 
 ### Deux formes d'adresse
 

@@ -16,6 +16,7 @@ window.Contact = (function () {
     email2: '',
     website: 'www.graffeuille.fr',
     websiteInContacts: false,
+    linkedin: '',
     company: 'GRAFFEUILLE',
     street: '120, route de Saint-Jean d’Angély',
     postalCode: '16170',
@@ -44,7 +45,7 @@ window.Contact = (function () {
                 'tagline', 'accent',
                 // Ajouts ultérieurs : toujours en fin de liste, pour que les QR
                 // déjà imprimés continuent de se lire.
-                'email2', 'department'];
+                'email2', 'department', 'linkedin'];
 
   function normalise(d) {
     var out = Object.assign({}, DEFAULTS, d || {});
@@ -78,6 +79,18 @@ window.Contact = (function () {
   function websiteUrl(d) {
     if (!d.website) return '';
     return /^https?:\/\//i.test(d.website) ? d.website : 'https://' + d.website;
+  }
+
+  /**
+   * Adresse du profil LinkedIn. Le champ accepte les trois formes que les gens
+   * recopient : l'URL complète, « linkedin.com/in/… », ou le seul identifiant.
+   */
+  function linkedinUrl(d) {
+    var v = String(d.linkedin || '').trim().replace(/\/+$/, '');
+    if (!v) return '';
+    if (/^https?:\/\//i.test(v)) return v;
+    if (/^(www\.)?linkedin\.com\//i.test(v)) return 'https://www.' + v.replace(/^www\./i, '');
+    return 'https://www.linkedin.com/in/' + v.replace(/^\/+/, '');
   }
 
   function emails(d) {
@@ -128,6 +141,7 @@ window.Contact = (function () {
     if (d.email) lines.push('EMAIL;TYPE=WORK,INTERNET:' + d.email);
     if (d.email2) lines.push('EMAIL;TYPE=WORK,INTERNET:' + d.email2);
     if (d.website) lines.push('URL:' + websiteUrl(d));
+    if (d.linkedin) lines.push('X-SOCIALPROFILE;TYPE=linkedin:' + linkedinUrl(d));
     lines.push('END:VCARD');
     return lines.join('\r\n');
   }
@@ -202,6 +216,7 @@ window.Contact = (function () {
     DEFAULTS: DEFAULTS, FIELDS: FIELDS, CHECKBOXES: CHECKBOXES,
     normalise: normalise, fullName: fullName, slugify: slugify,
     cityLine: cityLine, addressQuery: addressQuery, websiteUrl: websiteUrl,
+    linkedinUrl: linkedinUrl,
     vcard: vcard, emails: emails, e164: e164, telType: telType,
     pack: pack, unpack: unpack,
     cardUrl: cardUrl, readFragment: readFragment
