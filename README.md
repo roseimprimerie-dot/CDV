@@ -12,7 +12,6 @@ Attention pour le lien QR :
 | --- | --- |
 | `equipe/<personne>/` | **La carte en ligne**, une adresse par employé. C'est elle qui s'ouvre quand on scanne le QR code au dos de la carte imprimée. Elle ne montre que les coordonnées, sur une page pensée pour un téléphone. |
 | `index.html` | Entrée de secours : affiche la personne désignée par le fragment d'URL. |
-| `editeur.html` | **L'éditeur.** On y saisit les coordonnées, on voit la carte se composer, on exporte le fichier d'impression. Aucune page publique n'y renvoie. |
 
 Pourquoi GitHub ? : tout tourne dans le navigateur : pas de serveur, pas de compte, pas de
 dépendance externe.
@@ -44,7 +43,6 @@ Ce sont celles-ci que les QR code vont ouvrir :
 
 | Adresse | Ce qu'elle ouvre |
 | --- | --- |
-| <https://roseimprimerie-dot.github.io/CDV/editeur.html> | L'éditeur. Aucune page publique n'y renvoie : il n'est ni listé, ni protégé. |
 | <https://roseimprimerie-dot.github.io/CDV/> | Entrée de secours. Sans fragment, elle affiche la carte de Jérôme Goumard. |
 | <https://roseimprimerie-dot.github.io/CDV/#loic-bernard> | Ancienne forme par identifiant, toujours acceptée pour ne pas invalider un QR déjà imprimé. |
 | <https://roseimprimerie-dot.github.io/CDV/equipe/sarah-fossard/carte.json> | La fiche brute d'une personne, telle que la page la lit. |
@@ -83,9 +81,8 @@ Le site est `www.graffeuille.fr` pour l'ensemble de l'équipe.
 ### Ajouter un employé
 
 1. Dupliquer `equipe/_modele/`, le renommer `prenom-nom`.
-2. Dans l'éditeur, remplir le formulaire, mettre `prenom-nom` dans
-   « Identifiant de la personne », puis **Fiche pour le site** : le fichier
-   `carte.json` téléchargé remplace celui du dossier.
+2. Ouvrir le `carte.json` du nouveau dossier et le remplir : nom, fonction,
+   téléphone, courriel. Le champ `slug` reprend `prenom-nom`.
 3. Déposer éventuellement une photo dans le dossier et écrire son nom de
    fichier dans le champ « Photo du dossier ».
    Le champ `linkedin` de `carte.json` vaut déjà la page de l'entreprise.
@@ -148,38 +145,25 @@ rafraîchissement suffit. Sur GitHub Pages, le réseau de diffusion peut servir
 l'ancienne version quelques minutes après le `git push` - c'est le délai de
 publication.
 
-
 ## Organisation du code
 
 ```
 equipe/<personne>/      un dossier par employé : carte.json, photo, index.html
 equipe/_modele/         gabarit à dupliquer
 index.html              entrée de secours, pilotée par le fragment d'URL
-editeur.html            éditeur des cartes
 
 assets/js/contact.js    modèle partagé : valeurs, vCard, encodage de l'URL
 assets/js/icons.js      pictogrammes, extraits de la fonte d'icônes d'origine
 assets/js/logo.js       tracés du logo, en millimètres dans le repère de la carte
 assets/js/carte.js      page publique (elle construit tout le gabarit)
-assets/js/card.js       rendu SVG du recto et du verso
-assets/js/qrcode.js     encodeur QR autonome (ISO/IEC 18004, mode octet)
-assets/js/app.js        éditeur : formulaire, annuaire, exports
 assets/css/fonts.css    fontes hébergées par le site
-assets/fonts/           Roboto Condensed, Inter, Archivo (SIL OFL 1.1)
+assets/fonts/           Inter, Archivo (SIL OFL 1.1)
 assets/css/carte.css    page publique (thèmes clair et sombre)
-assets/css/app.css      éditeur et règles d'impression
 assets/img/             logo et symbole en SVG, réutilisables hors de la carte
 ```
 
-`card.js` est le seul endroit qui décrit la mise en page imprimée : l'aperçu,
-le PDF, le SVG et le PNG sortent tous du même rendu. `contact.js` est le seul
-endroit qui décrit les données, partagé par les deux pages.
-
-L'encodeur QR est écrit à la main plutôt qu'importé d'un CDN, pour que les
-pages restent utilisables hors ligne et sans dépendance à surveiller. Il a été
-vérifié par relecture des codes produits (29 combinaisons de niveaux L/M/Q/H et
-de versions 1 à 39, toutes relues correctement), puis sur des captures du rendu
-réel de la carte, avec identifiant court et avec coordonnées en URL.
+`contact.js` est le seul endroit qui décrit les données, partagé par la page
+d'un dossier et par l'entrée de secours.
 
 ## Mise en ligne
 
@@ -194,5 +178,4 @@ En local :
 python3 -m http.server 8000
 ```
 
-`http://localhost:8000/equipe/jerome-goumard/` ouvre sa carte,
-`http://localhost:8000/editeur.html` l’éditeur.
+`http://localhost:8000/equipe/jerome-goumard/` ouvre sa carte.
